@@ -84,9 +84,10 @@ int CountUsableTiles (string stem, string &bag, int blanks, map<string, string> 
 	return usable;
 }
 
-void CreateDictionary (map<string, string> &dict)
+void CreateDictionary (string filename, map<string, string> &dict)
 {
-	ifstream dictfile("OWL2.txt");
+//	ifstream dictfile("OWL3-wordsonly.txt");
+	ifstream dictfile(filename.c_str());
 
 	while (dictfile.good())
 	{
@@ -117,7 +118,7 @@ void BuildStems (int length, string stem, string &bag, string::iterator pos, set
 	}
 }
 
-int main ()
+int main (int argc, char **argv)
 {
 	string bag("AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ");
 	string stem;
@@ -126,8 +127,13 @@ int main ()
 	set<string> stemSet;
 	map<string, string> dict;
 
-	CreateDictionary(dict);	
-	BuildStems(7, stem, bag, It, stemSet);
+	if (argc != 3) {
+		cout << "Usage: " << argv[0] << " <Dictionary file> <Stem Length>" << endl;
+		return 0;
+	}
+
+	CreateDictionary(argv[1], dict);	
+	BuildStems(atoi(argv[2]), stem, bag, It, stemSet);
 
 	for (set<string>::iterator It = stemSet.begin(); It != stemSet.end(); ++It)
 	{
